@@ -1,0 +1,4 @@
+name: SimpleTools
+version: '1.0-SNAPSHOT'
+main: org.simpleTools.SimpleToolsPlugin
+api-version: '1.21'

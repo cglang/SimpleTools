@@ -1,0 +1,5 @@
+.gradle/
+.idea/
+build/
+gradle/
+minecraft_debug_plugin_server/
