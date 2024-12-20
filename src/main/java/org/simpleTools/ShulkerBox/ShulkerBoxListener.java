@@ -29,6 +29,7 @@ public class ShulkerBoxListener implements Listener {
         if (!actualShulkerBoxItemStack.getType().name().endsWith("SHULKER_BOX"))
             return;
 
-        ShulkerBoxPlusInventory.open(player, actualShulkerBoxItemStack);
+        ShulkerBoxPlusInventory shulkerBoxPlusInventory = new ShulkerBoxPlusInventory(player, actualShulkerBoxItemStack);
+        shulkerBoxPlusInventory.open();
     }
 }

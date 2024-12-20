@@ -5,6 +5,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.simpleTools.CraftingTable.CraftingTableListener;
 import org.simpleTools.EnderChest.EnderChestPlusListener;
+import org.simpleTools.FireworkPlus.BingoCommandListener;
 import org.simpleTools.ShulkerBox.ShulkerBoxListener;
 
 public final class SimpleToolsPlugin extends JavaPlugin {
@@ -29,6 +30,9 @@ public final class SimpleToolsPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(mainListener, this);
         Bukkit.getPluginManager().registerEvents(shulkerBoxListener, this);
         Bukkit.getPluginManager().registerEvents(craftingTableListener, this);
+        Bukkit.getPluginManager().registerEvents(new BingoCommandListener(), this);
+
+        this.getCommand("bingo").setExecutor(new BingoCommandListener());
     }
 
     @Override

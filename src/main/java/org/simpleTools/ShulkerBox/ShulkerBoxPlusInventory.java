@@ -1,6 +1,5 @@
 package org.simpleTools.ShulkerBox;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.ShulkerBox;
@@ -11,7 +10,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -34,36 +32,18 @@ public class ShulkerBoxPlusInventory implements Listener {
     /// 虚拟的潜影盒
     private final Inventory virtualShulkerInventory;
 
-    private ShulkerBoxPlusInventory(Player player, ItemStack actualShulkerBoxItemStack) {
+    public ShulkerBoxPlusInventory(Player player, ItemStack actualShulkerBoxItemStack) {
+        Bukkit.getPluginManager().registerEvents(this, SimpleToolsPlugin.getInstance());
         this.player = player;
         this.actualShulkerBoxItemStack = actualShulkerBoxItemStack;
         this.virtualShulkerInventory = createVirtualInventory(actualShulkerBoxItemStack);
     }
 
-    public static void open(Player player, ItemStack actualShulkerBoxItemStack) {
-        var shulkerBoxPlusInventory = new ShulkerBoxPlusInventory(player, actualShulkerBoxItemStack);
-        Bukkit.getPluginManager().registerEvents(shulkerBoxPlusInventory, SimpleToolsPlugin.getInstance());
-
-        shulkerBoxPlusInventory.openVirtualShulkerBoxPlusInventory();
-    }
-
     /// 创建虚拟的潜影盒
     private Inventory createVirtualInventory(ItemStack actualShulkerBoxItemStack) {
-        var displayName = actualShulkerBoxItemStack.getItemMeta().displayName();
-        Inventory virtualShulkerInventory;
-        if (displayName == null) {
-            var component = Component.translatable(actualShulkerBoxItemStack);
-            virtualShulkerInventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, component);
-        } else {
-            virtualShulkerInventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, displayName);
-        }
-
         if (actualShulkerBoxItemStack.getItemMeta() instanceof BlockStateMeta blockStateMeta) {
             if (blockStateMeta.getBlockState() instanceof ShulkerBox shulkerBox) {
-                var actualShulkerInventory = shulkerBox.getInventory();
-                for (int i = 0; i < actualShulkerInventory.getSize(); i++) {
-                    virtualShulkerInventory.setItem(i, actualShulkerInventory.getItem(i));
-                }
+                return shulkerBox.getInventory();
             }
         }
 
@@ -71,7 +51,7 @@ public class ShulkerBoxPlusInventory implements Listener {
     }
 
     /// 让玩家显示虚拟的潜影盒
-    private void openVirtualShulkerBoxPlusInventory() {
+    public void open() {
         player.openInventory(virtualShulkerInventory);
         // 播放潜影盒打开的声音
         player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 0.5f, 1.0f);
@@ -84,7 +64,6 @@ public class ShulkerBoxPlusInventory implements Listener {
         if (meta instanceof BlockStateMeta blockStateMeta) {
             if (blockStateMeta.getBlockState() instanceof ShulkerBox shulkerBox) {
                 Inventory shulkerInventory = shulkerBox.getInventory();
-
                 for (int i = 0; i < virtualShulkerInventory.getSize(); i++) {
                     shulkerInventory.setItem(i, virtualShulkerInventory.getItem(i));
                 }
