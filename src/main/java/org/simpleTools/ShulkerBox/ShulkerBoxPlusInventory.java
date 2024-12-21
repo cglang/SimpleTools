@@ -17,13 +17,6 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.simpleTools.SimpleToolsPlugin;
 
-/**
- * 玩家
- * 手里的潜影盒
- * 展示的虚拟潜影盒
- * Actual
- * Virtual
- */
 public class ShulkerBoxPlusInventory implements Listener {
     // 玩家
     private final Player player;
@@ -91,7 +84,9 @@ public class ShulkerBoxPlusInventory implements Listener {
     public void onShulkerDrop(PlayerDropItemEvent event) {
         if (!event.getPlayer().equals(player)) return;
         ItemStack droppedItem = event.getItemDrop().getItemStack();
-        if (droppedItem.getType().name().endsWith("SHULKER_BOX")) {
+        if (!ShulkerBoxUtil.IsShulkerBox(droppedItem.getType())) return;
+
+        if (droppedItem.hashCode() == actualShulkerBoxItemStack.hashCode()) {
             event.setCancelled(true);
         }
     }
@@ -101,7 +96,9 @@ public class ShulkerBoxPlusInventory implements Listener {
     public void onShulkerMove(InventoryClickEvent event) {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) return;
-        if (event.getCurrentItem().getType().name().endsWith("SHULKER_BOX")) {
+        if (!ShulkerBoxUtil.IsShulkerBox(clickedItem.getType())) return;
+
+        if (event.getCurrentItem().hashCode() == actualShulkerBoxItemStack.hashCode()) {
             event.setCancelled(true);
         }
     }

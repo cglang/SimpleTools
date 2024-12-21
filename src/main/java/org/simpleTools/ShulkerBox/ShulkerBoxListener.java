@@ -25,9 +25,7 @@ public class ShulkerBoxListener implements Listener {
         // 手中的物品
         ItemStack actualShulkerBoxItemStack = player.getInventory().getItemInMainHand();
 
-        // Material枚举中不同颜色的潜影盒有不同的值 所以用此方法
-        if (!actualShulkerBoxItemStack.getType().name().endsWith("SHULKER_BOX"))
-            return;
+        if (!ShulkerBoxUtil.IsShulkerBox(actualShulkerBoxItemStack.getType())) return;
 
         ShulkerBoxPlusInventory shulkerBoxPlusInventory = new ShulkerBoxPlusInventory(player, actualShulkerBoxItemStack);
         shulkerBoxPlusInventory.open();
