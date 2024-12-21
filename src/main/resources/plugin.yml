@@ -1,4 +1,8 @@
 name: SimpleTools
-version: '1.0-SNAPSHOT'
+version: '1.2'
 main: org.simpleTools.SimpleToolsPlugin
 api-version: '1.21'
+commands:
+  bingo:
+    description: 释放烟花
+    usage: /bingo <玩家名称>

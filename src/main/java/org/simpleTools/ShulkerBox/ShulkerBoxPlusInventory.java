@@ -78,10 +78,12 @@ public class ShulkerBoxPlusInventory implements Listener {
     /// 关闭潜影盒时
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
-        saveContents();
-        // 播放潜影盒打开的声音
-        player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 0.5f, 1.0f);
-        HandlerList.unregisterAll(this);
+        if (event.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+            saveContents();
+            // 播放潜影盒打开的声音
+            player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, 0.5f, 1.0f);
+            HandlerList.unregisterAll(this);
+        }
     }
 
     /// 潜影盒被玩家丢弃
