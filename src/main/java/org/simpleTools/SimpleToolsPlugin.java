@@ -8,6 +8,7 @@ import org.simpleTools.DeathChest.DeathChestListener;
 import org.simpleTools.EnderChest.EnderChestPlusListener;
 import org.simpleTools.Entitites.ReproductionListener;
 import org.simpleTools.FireworkPlus.BingoCommandListener;
+import org.simpleTools.NetherPortalTeleport.NetherPortalTeleportListener;
 import org.simpleTools.ShulkerBox.ShulkerBoxListener;
 
 import java.util.Objects;
@@ -33,7 +34,7 @@ public final class SimpleToolsPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BingoCommandListener(), this);
         Bukkit.getPluginManager().registerEvents(new DeathChestListener(), this);
         Bukkit.getPluginManager().registerEvents(new ReproductionListener(), this);
-
+        Bukkit.getPluginManager().registerEvents(new NetherPortalTeleportListener(), this);
 
         Objects.requireNonNull(this.getCommand("bingo")).setExecutor(new BingoCommandListener());
     }
