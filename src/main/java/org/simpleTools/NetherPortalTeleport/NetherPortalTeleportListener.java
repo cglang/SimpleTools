@@ -94,9 +94,9 @@ public class NetherPortalTeleportListener implements Listener {
         var coordinates = coordinate.split(",");
         if (coordinates.length == 3) {
             try {
-                int x = Integer.parseInt(coordinates[0]);
-                int y = Integer.parseInt(coordinates[1]);
-                int z = Integer.parseInt(coordinates[2]);
+                double x = Integer.parseInt(coordinates[0]);
+                double y = Integer.parseInt(coordinates[1]);
+                double z = Integer.parseInt(coordinates[2]);
                 return new Location(null, x, y, z);
             } catch (Exception e) {
                 return null;
