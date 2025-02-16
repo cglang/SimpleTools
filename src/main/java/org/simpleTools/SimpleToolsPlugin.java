@@ -28,15 +28,31 @@ public final class SimpleToolsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Bukkit.getPluginManager().registerEvents(new EnderChestPlusListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ShulkerBoxListener(), this);
-        Bukkit.getPluginManager().registerEvents(new CraftingTableListener(), this);
-        Bukkit.getPluginManager().registerEvents(new BingoCommandListener(), this);
-        Bukkit.getPluginManager().registerEvents(new DeathChestListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ReproductionListener(), this);
-        Bukkit.getPluginManager().registerEvents(new NetherPortalTeleportListener(), this);
+        saveDefaultConfig();
+        if (getConfig().getBoolean("openPhantomBoxWithHand"))
+            Bukkit.getPluginManager().registerEvents(new EnderChestPlusListener(), this);
 
-        Objects.requireNonNull(this.getCommand("bingo")).setExecutor(new BingoCommandListener());
+        if (getConfig().getBoolean("openShulkerBoxWithHand"))
+            Bukkit.getPluginManager().registerEvents(new ShulkerBoxListener(), this);
+
+        if (getConfig().getBoolean("openCraftingTableWithHand"))
+            Bukkit.getPluginManager().registerEvents(new CraftingTableListener(), this);
+
+        if (getConfig().getBoolean("launchFirework"))
+        {
+            Bukkit.getPluginManager().registerEvents(new BingoCommandListener(), this);
+            Objects.requireNonNull(this.getCommand("bingo")).setExecutor(new BingoCommandListener());
+        }
+
+        if (getConfig().getBoolean("createChestOnDeath"))
+            Bukkit.getPluginManager().registerEvents(new DeathChestListener(), this);
+
+        if (getConfig().getBoolean("breedFrogEggs"))
+            Bukkit.getPluginManager().registerEvents(new ReproductionListener(), this);
+
+        if (getConfig().getBoolean("teleportToNetherPortal"))
+            Bukkit.getPluginManager().registerEvents(new NetherPortalTeleportListener(), this);
+
     }
 
     @Override

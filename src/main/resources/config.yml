@@ -1,0 +1,14 @@
+# 手持打开潜影盒
+openShulkerBoxWithHand: false
+# 手持打开魔影箱
+openPhantomBoxWithHand: false
+# 手持打开工作台
+openCraftingTableWithHand: false
+# 死亡时创建箱子，将物品存入
+createChestOnDeath: false
+# bingo命令释放烟花
+launchFirework: false
+# 青蛙繁殖时的全服播报
+breedFrogEggs: false
+# 地狱门传送
+teleportToNetherPortal: false
