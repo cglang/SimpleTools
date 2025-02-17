@@ -12,3 +12,5 @@ launchFirework: false
 breedFrogEggs: false
 # 地狱门传送
 teleportToNetherPortal: false
+# 玩家自己的世界
+openPlayerWorld: false

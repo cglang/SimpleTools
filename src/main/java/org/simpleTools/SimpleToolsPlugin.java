@@ -9,6 +9,7 @@ import org.simpleTools.EnderChest.EnderChestPlusListener;
 import org.simpleTools.Entitites.ReproductionListener;
 import org.simpleTools.FireworkPlus.BingoCommandListener;
 import org.simpleTools.NetherPortalTeleport.NetherPortalTeleportListener;
+import org.simpleTools.NetherPortalTeleport.PlayerWorldListener;
 import org.simpleTools.ShulkerBox.ShulkerBoxListener;
 
 import java.util.Objects;
@@ -38,8 +39,7 @@ public final class SimpleToolsPlugin extends JavaPlugin {
         if (getConfig().getBoolean("openCraftingTableWithHand"))
             Bukkit.getPluginManager().registerEvents(new CraftingTableListener(), this);
 
-        if (getConfig().getBoolean("launchFirework"))
-        {
+        if (getConfig().getBoolean("launchFirework")) {
             Bukkit.getPluginManager().registerEvents(new BingoCommandListener(), this);
             Objects.requireNonNull(this.getCommand("bingo")).setExecutor(new BingoCommandListener());
         }
@@ -53,6 +53,10 @@ public final class SimpleToolsPlugin extends JavaPlugin {
         if (getConfig().getBoolean("teleportToNetherPortal"))
             Bukkit.getPluginManager().registerEvents(new NetherPortalTeleportListener(), this);
 
+        if (getConfig().getBoolean("openPlayerWorld")) {
+            NetherPortalTeleportListener.setOpenPlayerWorld(true);
+            Bukkit.getPluginManager().registerEvents(new PlayerWorldListener(), this);
+        }
     }
 
     @Override
