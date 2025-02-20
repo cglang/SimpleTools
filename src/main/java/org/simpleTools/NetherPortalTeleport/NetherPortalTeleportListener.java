@@ -3,7 +3,9 @@ package org.simpleTools.NetherPortalTeleport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
@@ -11,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 // 下界门传送
 public class NetherPortalTeleportListener implements Listener {
@@ -28,7 +32,6 @@ public class NetherPortalTeleportListener implements Listener {
         if (sign == null) return;
 
         var mode = GetNetherPortalMode(SignUtils.getSignLine(sign, Side.FRONT, 1));
-
         switch (mode) {
             case Teleport:
                 var to = toCoordinate(player, sign);
@@ -92,18 +95,56 @@ public class NetherPortalTeleportListener implements Listener {
     // 获取告示牌
     private @Nullable Sign getSign(Player player) {
         var location = player.getLocation();
+
+        Block portalBlock = getStartObsidianBlock(location, player.getWorld());
+        if (portalBlock == null) return null;
+
+        var signBlock = getSignBlock(portalBlock);
+        if (signBlock == null) return null;
+
+        return (Sign) signBlock.getState();
+    }
+
+    // 获取第一个开始位置的黑曜石方块
+    private @Nullable Block getStartObsidianBlock(Location location, World world) {
         int x = (int) location.getX();
         int y = (int) location.getY();
         int z = (int) location.getZ();
-
         // 遍历玩家周围三格范围内的所有方块
         for (int dx = -3; dx <= 3; dx++) {
-            for (int dz = -3; dz <= 3; dz++) {
-                Block block = player.getWorld().getBlockAt(x + dx, y + 1, z + dz);
-                if (block.getType() == Material.OAK_WALL_SIGN) {
-                    return (Sign) block.getState();
+            for (int dy = -3; dy <= 3; dy++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    Block block = world.getBlockAt(x + dx, y + 1, z + dz);
+                    if (block.getType() == Material.OBSIDIAN) {
+                        return block;
+                    }
                 }
             }
+        }
+
+        return null;
+    }
+
+    // 获取告示牌所在的方块
+    private @Nullable Block getSignBlock(Block start) {
+        Set<Block> portalBlocks = new HashSet<>();
+        Queue<Block> queue = new LinkedList<>();
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            Block block = queue.poll();
+            if (portalBlocks.contains(block)) continue;
+
+            Material type = block.getType();
+            if (type == Material.OBSIDIAN) {
+                portalBlocks.add(block);
+                for (BlockFace face : BlockFace.values()) {
+                    queue.add(block.getRelative(face));
+                }
+            }
+
+            if (block.getType() == Material.OAK_WALL_SIGN)
+                return block;
         }
 
         return null;
