@@ -1,9 +1,6 @@
 package org.simpleTools.NetherPortalTeleport;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -12,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -34,17 +32,27 @@ public class NetherPortalTeleportListener implements Listener {
         var mode = GetNetherPortalMode(SignUtils.getSignLine(sign, Side.FRONT, 1));
         switch (mode) {
             case Teleport:
+                event.setCancelled(true);
+
                 var to = toCoordinate(player, sign);
                 if (to != null) {
-                    event.setCancelled(true);
                     player.teleport(to);
                 }
                 break;
             case PlayerWorld:
-                var toPlayerWorld = toPlayerWorld(player, sign);
-                if (toPlayerWorld != null) {
-                    event.setCancelled(true);
-                    player.teleport(toPlayerWorld);
+                event.setCancelled(true);
+
+                // 进入世界权限检查
+                var threeLine = SignUtils.getSignLine(sign, Side.FRONT, 3);
+                var worldByPlayerName = threeLine.split(",")[0];
+                boolean decide = toPlayerWorldCheck(player, worldByPlayerName);
+                if (decide) {
+                    var toPlayerWorld = toPlayerWorld(player, sign);
+                    if (toPlayerWorld != null) {
+                        player.teleport(toPlayerWorld);
+                    }
+                } else {
+                    player.sendMessage("你不能进入这个世界");
                 }
                 break;
             case Command:
@@ -77,19 +85,63 @@ public class NetherPortalTeleportListener implements Listener {
 
     // 传送到玩家自己的世界
     private @Nullable Location toPlayerWorld(Player player, Sign sign) {
-        // 判断是否是进入玩家自己的世界
-        if (openPlayerWorld) {
-            var twoLine = SignUtils.getSignLine(sign, Side.FRONT, 2);
-            var coordinate = getCoordinate(twoLine);
-            PlayerWorld pw = new PlayerWorld();
-            var playerWorld = pw.getPlayerWorld(player.getUniqueId());
-            if (coordinate == null) {
-                return playerWorld.getSpawnLocation();
-            } else {
-                return new Location(playerWorld, coordinate.getX(), coordinate.getY(), coordinate.getZ());
-            }
+        if (!openPlayerWorld) return null;
+
+        PlayerWorld pw = new PlayerWorld();
+        World playerWorld;
+
+        var threeLine = SignUtils.getSignLine(sign, Side.FRONT, 3);
+        var worldByPlayerName = threeLine.split(",")[0];
+
+        var uuid = getPlayerUUID(worldByPlayerName);
+        if (uuid.toString().equals(player.getUniqueId().toString())) { // 进入自己的世界
+            playerWorld = pw.getPlayerWorld(player.getUniqueId());
+        } else { // 进入别人的世界
+            playerWorld = pw.getPlayerWorld(uuid);
         }
-        return null;
+
+        var twoLine = SignUtils.getSignLine(sign, Side.FRONT, 2);
+        var coordinate = getCoordinate(twoLine);
+        if (coordinate == null) {
+            return playerWorld.getSpawnLocation();
+        } else {
+            return new Location(playerWorld, coordinate.getX(), coordinate.getY(), coordinate.getZ());
+        }
+    }
+
+    private boolean toPlayerWorldCheck(Player player, String worldName) {
+
+        // 没有指定世界名 允许进入
+        if (worldName.isEmpty()) return true;
+
+        // 自己的世界 允许进入
+        if (worldName.equals(player.getName())) return true;
+
+        // 进入者是OP 允许进入
+        if (player.hasPermission("minecraft.command.op")) return true;
+
+        // 获取玩家背包中的所有物品
+        Inventory inventory = player.getInventory();
+        var decide = PlayerWorldUtils.checkPass(inventory, worldName, player.getName());
+        if (decide) return true;
+
+        // 获取玩家末影箱中的所有物品
+        Inventory enderChest = player.getEnderChest();
+        decide = PlayerWorldUtils.checkPass(enderChest, worldName, player.getName());
+        return decide;
+    }
+
+    public static UUID getPlayerUUID(String playerName) {
+        // 尝试通过玩家用户名获取玩家对象
+        Player player = Bukkit.getPlayer(playerName);
+        if (player != null) {
+            // 如果玩家在线，返回玩家的UUID
+            return player.getUniqueId();
+        } else {
+            // 如果玩家不在线，可以考虑使用离线玩家的方法
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+            return offlinePlayer.getUniqueId();
+        }
     }
 
     // 获取告示牌
@@ -189,8 +241,6 @@ public class NetherPortalTeleportListener implements Listener {
     private NetherPortalMode GetNetherPortalMode(String text) {
         if (text.equals("PlayerWorld") || text.equals("玩家的世界"))
             return NetherPortalMode.PlayerWorld;
-        else if (text.equals("Command") || text.equals("命令"))
-            return NetherPortalMode.Command;
         else if (text.equals("Teleport") || text.equals("传送") || text.isEmpty())
             return NetherPortalMode.Teleport;
         else
