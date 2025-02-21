@@ -1,5 +1,5 @@
 name: SimpleTools
-version: '1.6.1'
+version: '1.6.2'
 main: org.simpleTools.SimpleToolsPlugin
 api-version: '1.21'
 commands:
