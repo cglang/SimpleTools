@@ -32,10 +32,9 @@ public class NetherPortalTeleportListener implements Listener {
         var mode = GetNetherPortalMode(SignUtils.getSignLine(sign, Side.FRONT, 1));
         switch (mode) {
             case Teleport:
-                event.setCancelled(true);
-
                 var to = toCoordinate(player, sign);
                 if (to != null) {
+                    event.setCancelled(true);
                     player.teleport(to);
                 }
                 break;
