@@ -3,14 +3,15 @@ package org.simpleTools;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.simpleTools.CraftingTable.CraftingTableListener;
+import org.simpleTools.MainHand.WorkbenchListener;
 import org.simpleTools.DeathChest.DeathChestListener;
-import org.simpleTools.EnderChest.EnderChestPlusListener;
+import org.simpleTools.MainHand.EnderChest.EnderChestPlusListener;
 import org.simpleTools.Entitites.ReproductionListener;
 import org.simpleTools.FireworkPlus.BingoCommandListener;
-import org.simpleTools.NetherPortalTeleport.NetherPortalTeleportListener;
-import org.simpleTools.NetherPortalTeleport.PlayerWorldListener;
-import org.simpleTools.ShulkerBox.ShulkerBoxListener;
+import org.simpleTools.NetherPortal.NetherPortal;
+import org.simpleTools.NetherPortal.NetherPortalListener;
+import org.simpleTools.NetherPortal.World.PlayerWorldListener;
+import org.simpleTools.MainHand.ShulkerBox.ShulkerBoxListener;
 
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public final class SimpleToolsPlugin extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(new ShulkerBoxListener(), this);
 
         if (getConfig().getBoolean("openCraftingTableWithHand"))
-            Bukkit.getPluginManager().registerEvents(new CraftingTableListener(), this);
+            Bukkit.getPluginManager().registerEvents(new WorkbenchListener(), this);
 
         if (getConfig().getBoolean("launchFirework")) {
             Bukkit.getPluginManager().registerEvents(new BingoCommandListener(), this);
@@ -51,10 +52,10 @@ public final class SimpleToolsPlugin extends JavaPlugin {
             Bukkit.getPluginManager().registerEvents(new ReproductionListener(), this);
 
         if (getConfig().getBoolean("teleportToNetherPortal"))
-            Bukkit.getPluginManager().registerEvents(new NetherPortalTeleportListener(), this);
+            Bukkit.getPluginManager().registerEvents(new NetherPortalListener(), this);
 
         if (getConfig().getBoolean("openPlayerWorld")) {
-            NetherPortalTeleportListener.setOpenPlayerWorld(true);
+            NetherPortal.setOpenPlayerWorld(true);
             Bukkit.getPluginManager().registerEvents(new PlayerWorldListener(), this);
         }
     }

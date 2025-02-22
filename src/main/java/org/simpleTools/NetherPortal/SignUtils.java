@@ -1,4 +1,4 @@
-package org.simpleTools.NetherPortalTeleport;
+package org.simpleTools.NetherPortal;
 
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.block.Sign;

@@ -1,4 +1,4 @@
-package org.simpleTools.EnderChest;
+package org.simpleTools.MainHand.EnderChest;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;

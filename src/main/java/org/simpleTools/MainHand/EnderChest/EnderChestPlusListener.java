@@ -1,4 +1,4 @@
-package org.simpleTools.EnderChest;
+package org.simpleTools.MainHand.EnderChest;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package org.simpleTools.ShulkerBox;
+package org.simpleTools.MainHand.ShulkerBox;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
