@@ -45,11 +45,11 @@ public class NetherPortal {
         int x = (int) location.getX();
         int y = (int) location.getY();
         int z = (int) location.getZ();
-        // 遍历玩家周围三格范围内的所有方块
+        // 遍历玩家为中心3*3*11的方块
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -5; dy <= 5; dy++) {
                 for (int dz = -1; dz <= 1; dz++) {
-                    Block block = world.getBlockAt(x + dx, y + 1, z + dz);
+                    Block block = world.getBlockAt(x + dx, y + dy, z + dz);
                     if (block.getType() == Material.OBSIDIAN) {
                         return block;
                     }
