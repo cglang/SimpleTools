@@ -46,9 +46,9 @@ public class NetherPortal {
         int y = (int) location.getY();
         int z = (int) location.getZ();
         // 遍历玩家周围三格范围内的所有方块
-        for (int dx = -3; dx <= 3; dx++) {
-            for (int dy = -3; dy <= 3; dy++) {
-                for (int dz = -3; dz <= 3; dz++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -5; dy <= 5; dy++) {
+                for (int dz = -1; dz <= 1; dz++) {
                     Block block = world.getBlockAt(x + dx, y + 1, z + dz);
                     if (block.getType() == Material.OBSIDIAN) {
                         return block;
