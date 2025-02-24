@@ -14,3 +14,5 @@ breedFrogEggs: false
 teleportToNetherPortal: false
 # 玩家自己的世界
 openPlayerWorld: false
+# 连锁采集
+chainMiningRecipe: false
