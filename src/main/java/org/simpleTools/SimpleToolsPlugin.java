@@ -3,6 +3,7 @@ package org.simpleTools;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.simpleTools.ChainDestruction.ChopperListener;
 import org.simpleTools.MainHand.WorkbenchListener;
 import org.simpleTools.DeathChest.DeathChestListener;
 import org.simpleTools.MainHand.EnderChest.EnderChestPlusListener;
@@ -58,6 +59,8 @@ public final class SimpleToolsPlugin extends JavaPlugin {
             NetherPortal.setOpenPlayerWorld(true);
             Bukkit.getPluginManager().registerEvents(new PlayerWorldListener(), this);
         }
+        if (getConfig().getBoolean("chainMiningRecipe"))
+            Bukkit.getPluginManager().registerEvents(new ChopperListener(), this);
     }
 
     @Override

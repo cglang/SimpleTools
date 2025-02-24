@@ -2,12 +2,14 @@ package org.simpleTools.Utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ComponentUtils {
-    public static Component getComponent(String text, NamedTextColor color) {
+    public static @NotNull Component getComponent(String text, NamedTextColor color) {
         return Component.newline()
                 .content(text)
                 .color(color);
@@ -17,7 +19,8 @@ public class ComponentUtils {
         List<Component> lore = new ArrayList<>();
         var playerNameComponent = Component.newline()
                 .content(text)
-                .color(color);
+                .color(color)
+                .decoration(TextDecoration.ITALIC, false);
         lore.add(playerNameComponent);
 
         return lore;
